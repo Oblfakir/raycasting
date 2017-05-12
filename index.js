@@ -173,7 +173,7 @@ function Draw(){
             let res=segmentMinusDelta.haveAnIntersectionPoint(segm);
             if(res.result){
                 if(res.point.distanceToPoint(centerPoint)<=pointMinus.distanceToPoint(centerPoint)){
-                    pointPlus=res.point;
+                    pointMinus=res.point;
                 }
             }
         });
