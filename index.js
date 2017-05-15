@@ -107,26 +107,6 @@ class Environment{
     clearEnvironment(){
         environmentContext.clearRect(0,0,width,width);
     }
-    rotateFigure(alpha){
-        var newFigures=[];
-        this.figures.forEach((item,num)=>{
-            if(num!=3){
-                newFigures.push(item);
-            }
-            else{
-                newFigures.push(Rotate(item,new Point(220,650),alpha));    
-            }
-        })
-        this.figures=newFigures;
-        this.figuresSegments=[];
-        this.pointsOfFigures=[];
-        this.figures.forEach((figure)=>{
-            this.figuresSegments=this.figuresSegments.concat(figure.segments);
-        })
-        this.figures.forEach((figure)=>{
-            this.pointsOfFigures=this.pointsOfFigures.concat(figure.points);
-        })
-    }
 }
 
 const width=900;
@@ -141,6 +121,7 @@ const figure2=new Figure([new Point(620,650),new Point(650,750),new Point(650,55
 const figure3=new Figure([new Point(222,314),new Point(230,330),new Point(247,327)]);
 const figure4=new Figure([new Point(220,550),new Point(220,650),new Point(400,650),new Point(160,730)])
 const figure5=new Figure([new Point(500,100),new Point(700,100),new Point(700,300),new Point(500,300),new Point(500,260),new Point(650,260),new Point(650,140),new Point(500,140)]);
+const figure6=new Figure([new Point(260,570),new Point(350,570),new Point(350,600),new Point(260,600)]);
 
 let env=new Environment();
 
@@ -150,6 +131,9 @@ window.onload=()=>{
     env.addFigure(figure3);
     env.addFigure(figure4);
     env.addFigure(figure5);
+    env.addFigure(figure6);
+
+    env.redrawAll();
 
     Draw();
 }
@@ -160,14 +144,10 @@ window.onmousemove=(e)=>{
 }
 
 let currentDirectionRad=0;
-let rotationAngle=0.05;
+let rotationAngle=0.02;
 
 function Draw(){
     env.clear();
-    env.clearEnvironment();
-    env.rotateFigure(rotationAngle);
-    env.redrawAll();
-
     let points=[];
     //находим все точки в секторе зрения и выбираем те, которые видимы
     env.pointsOfFigures.forEach((item)=>{
@@ -292,15 +272,4 @@ function haveAnIntersectionPoint(_segment1,_segment2){
         result.result=bool1 && bool2;
     }
     return result;
-}
-
-//const figure4=new Figure([new Point(220,550),new Point(220,650),new Point(400,650),new Point(160,730)]);
-function Rotate(figure,point,alpha){
-    var fig=[];
-    figure.points.forEach((dot)=>{
-        let distance=dot.distanceToPoint(point);
-        let angle=Angle(dot.x-point.x,dot.y-point.y)+alpha;
-        fig.push(new Point(point.x+distance*Math.cos(angle),point.y+distance*Math.sin(angle)))
-    });
-    return new Figure(fig);
 }
